@@ -1,0 +1,32 @@
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.6/axios.min.js"></script>
+  <script>
+  function sendRequest() {
+    const a = document.getElementById("a").value;
+    const b = document.getElementById("b").value;
+
+    console.log("Sending request", a, b);
+
+    axios.post("http://localhost:3001/sum", {
+      a,
+      b
+    })
+    .then(res => {
+      console.log("RESPONSE:", res.data);
+      alert("Sum = " + res.data.answer);
+    })
+    .catch(err => {
+      console.error("AXIOS ERROR:", err);
+      alert("Error: " + err.message);
+    });
+  }
+</script>
+
+</head>
+
+<body>
+  <input id="a" type="text" placeholder="First value"></input>
+  <input id="b" type="text" placeholder="Second value"></input>
+
+  <button onclick="sendRequest()">Find sum</button>
+</body>
