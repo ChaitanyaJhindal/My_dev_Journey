@@ -1,0 +1,8 @@
+<<<<<<< HEAD
+=======
+hi there what are you doing .
+
+
+now the changes are omn differnet branch 
+>>>>>>> 6043b24 (files changed in diff. branch)
+now also made some changes 
