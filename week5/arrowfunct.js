@@ -39,4 +39,14 @@
 
 
 // not a really cleaner wway but a classical way for the same now coming on js cool part 
-
+const arr =[1,2,3,4,5];
+function transform(n){
+    if(n%2==0){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+const ans = arr.filter(transform)
+console.log(ans);
