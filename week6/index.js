@@ -1,136 +1,164 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
+// Import the express library
+const express = require("express");
 
-const JWT_SECRET = "thisisarandomsecretforJWT";
+// Import the jsonwebtoken library
+const jwt = require("jsonwebtoken");
+
+// Create an instance of express application
 const app = express();
+
+// Use the express.json() middleware to parse the request body
 app.use(express.json());
 
+// Create an array to store the users username and password
 const users = [];
 
-/*
------------------------------------------
-OLDER APPROACH (RANDOM TOKENS - NOT JWT)
------------------------------------------
-
-function generateToken() {
-  const length = 10;
-  let result = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-
-  return result;
-}
-
-In this approach:
-- Token was random
-- Token had to be stored in DB
-- Every request required DB lookup
-- Server was NOT stateless
-*/
+// Create a secret key for the jwt token
+const JWT_SECRET = "ilove100xdevsliveclasses";
 
 
-// NOW WE USE JWT (BETTER APPROACH)
+// ------------------------------------
+// SIGNUP ROUTE
+// ------------------------------------
 
-// SIGNUP
-function signuphandler(req, res) {
-  const { username, password } = req.body;
+// Create a post request for the signup route
+app.post("/signup", function (req, res) {
 
-  users.push({
-    username: username,
-    password: password
-  });
+    // Get the username and password from the request body
+    const username = req.body.username;
+    const password = req.body.password;
 
-  res.json({
-    message: "you are signed up"
-  });
-}
-
-// SIGNIN
-function signinhandler(req, res) {
-  const { username, password } = req.body;
-
-  const foundUser = users.find(function (u) {
-    return u.username === username && u.password === password;
-  });
-
-  if (foundUser) {
-
-    /*
-      JWT APPROACH:
-      - No random token generation
-      - No storing token in DB
-      - JWT itself contains user identity
-    */
-    const token = jwt.sign(
-      { username: username }, // payload
-      JWT_SECRET               // secret
-    );
-
-    res.json({
-      token: token
-    });
-  } else {
-    res.status(401).json({
-      message: "Invalid username or password"
-    });
-  }
-}
-
-// PROTECTED ENDPOINT
-function authenticatedep(req, res) {
-
-  /*
-    Earlier:
-    - We used to match token from DB
-
-    Now:
-    - Client sends JWT in Authorization header
-    - Server verifies JWT using secret
-  */
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader) {
-    res.status(401).json({
-      message: "Token missing"
-    });
-    return;
-  }
-
-  const token = authHeader.split(" ")[1]; // Bearer <token>
-
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-
-    /*
-      decoded contains the payload we signed earlier
-      Example: { username: "chaitanya" }
-    */
-    const foundUser = users.find(function (u) {
-      return u.username === decoded.username;
-    });
-
-    if (foundUser) {
-      res.json({
-        username: foundUser.username
-      });
-    } else {
-      res.status(401).json({
-        message: "Unauthorized"
-      });
+    // Check if the user is already signed up or not
+    if (users.find((user) => user.username === username)) {
+        // Send a response to the client that the user is already signed up
+        return res.json({
+            message: "You are already signed up!",
+        });
     }
 
-  } catch (err) {
-    res.status(401).json({
-      message: "Invalid token"
+    // Check if the username has at least 5 characters or not
+    if (username.length < 5) {
+        // Send a response to the client that the username should have at least 5 characters
+        return res.json({
+            message: "You need to have at least 5 characters to sign up",
+        });
+    }
+
+    // Push the username and password to the users array
+    users.push({
+        username: username,
+        password: password,
     });
-  }
-}
 
-app.post("/signup", signuphandler);
-app.post("/signin", signinhandler);
-app.get("/me", authenticatedep);
+    // Send a response to the client that the user has signed up successfully
+    res.json({
+        message: "You have signed up successfully!",
+    });
+});
 
-app.listen(3001);
+
+// ------------------------------------
+// SIGNIN ROUTE
+// ------------------------------------
+
+// Create a post request for the signin route
+app.post("/signin", function (req, res) {
+
+    // Get the username and password from the request body
+    const username = req.body.username;
+    const password = req.body.password;
+
+    // Find the user in the users array with the given username and password
+    const foundUser = users.find(
+        (user) => user.username === username && user.password === password
+    );
+
+    // Check if the user is found or not
+    if (foundUser) {
+
+        // Create a JWT token using the jwt.sign() function
+        // The token contains the username inside its payload
+        const token = jwt.sign(
+            {
+                username: foundUser.username,
+            },
+            JWT_SECRET
+        );
+
+        // Send a response to the client with the token
+        return res.json({
+            token: token,
+            message: "You have signed in successfully!",
+        });
+
+    } else {
+        // Send a response to the client that the credentials are invalid
+        return res.json({
+            message: "Invalid username or password!",
+        });
+    }
+});
+
+
+// ------------------------------------
+// PROTECTED ROUTE (/me)
+// ------------------------------------
+
+// Create a get request for the me route
+app.get("/me", function (req, res) {
+
+    // Get the authorization header from the request
+    const authHeader = req.headers.authorization;
+
+    // Check if the authorization header is present or not
+    if (!authHeader) {
+        // Send a response to the client that the token is missing
+        return res.json({
+            message: "Token is missing!",
+        });
+    }
+
+    // The authorization header is in the format:
+    // "Bearer <token>"
+    // So we split it and extract the actual token
+    const token = authHeader.split(" ")[1];
+
+    try {
+        // Verify the token using the jwt.verify() function
+        // This checks if the token is valid and not tampered
+        const userDetails = jwt.verify(token, JWT_SECRET);
+
+        // Find the user in the users array with the username from the token
+        const foundUser = users.find(
+            (user) => user.username === userDetails.username
+        );
+
+        // Check if the user is found or not
+        if (foundUser) {
+            // Send a response to the client with user details
+            // (password should not be sent in real applications)
+            return res.json({
+                username: foundUser.username,
+            });
+        } else {
+            // Send a response if the user does not exist
+            return res.json({
+                message: "Invalid token!",
+            });
+        }
+
+    } catch (err) {
+        // This block runs if the token is invalid or tampered
+        return res.json({
+            message: "Invalid token!",
+        });
+    }
+});
+
+
+// ------------------------------------
+// START SERVER
+// ------------------------------------
+
+// Start the server on port 3000
+app.listen(3000);
