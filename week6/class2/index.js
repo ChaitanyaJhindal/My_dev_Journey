@@ -7,7 +7,28 @@ const users = [];
 
 app.use(express.json());
 
-app.post("/signup", function (req, res) {
+
+function auth(req,res,next){
+  const token = req.headers.token;
+  const decodedata = jwt.verify(token , JWT_SECRET)
+  if(decodedata.username){
+    req.username = decodedata.username;
+    next()
+  }
+  else{
+    res.json({
+      message : "You are not logged in"
+    })
+  }
+}
+
+function logger(req,res,next){
+  console.log(req.method + "request came ");
+  next();
+}
+
+
+app.post("/signup", logger, function (req, res) {
   const username = req.body.username;
   const password = req.body.password;
 
@@ -50,7 +71,7 @@ app.post("/signin", function (req, res) {
   });
 });
 
-app.get("/get_password", function (req, res) {
+app.get("/get_password", auth ,  function (req, res) {
   const token = req.headers.token;
 
   try {
