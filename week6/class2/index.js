@@ -1,106 +1,92 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const app = express();
+const cors = require("cors");
 
+const app = express();
 const JWT_SECRET = "learningwebdevfromscratch";
 const users = [];
 
 app.use(express.json());
+app.use(cors());
 
 
-function auth(req,res,next){
-  const token = req.headers.token;
-  const decodedata = jwt.verify(token , JWT_SECRET)
-  if(decodedata.username){
-    req.username = decodedata.username;
-    next()
-  }
-  else{
-    res.json({
-      message : "You are not logged in"
-    })
-  }
-}
-
-function logger(req,res,next){
-  console.log(req.method + "request came ");
+// Logger middleware
+function logger(req, res, next) {
+  console.log("\nNew Request:", req.method, req.url);
   next();
 }
 
 
-app.post("/signup", logger, function (req, res) {
-  const username = req.body.username;
-  const password = req.body.password;
-
-  users.push({
-    username: username,
-    password: password
-  });
-
-  res.json({
-    message: "You are signed up"
-  });
-});
-
-app.post("/signin", function (req, res) {
-  const username = req.body.username;
-  const password = req.body.password;
-
-  let foundUser = null;
-
-  for (let i = 0; i < users.length; i++) {
-    if (users[i].username === username && users[i].password === password) {
-      foundUser = users[i];
-    }
-  }
-
-  if (!foundUser) {
-    res.json({
-      message: "Credentials are incorrect"
-    });
-    return;
-  }
-
-  const token = jwt.sign(
-    { username: username },
-    JWT_SECRET
-  );
-
-  res.json({
-    token: token
-  });
-});
-
-app.get("/get_password", auth ,  function (req, res) {
+// Auth middleware
+function auth(req, res, next) {
   const token = req.headers.token;
+  console.log("Token received:", token);
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
+    console.log("Token verified. User =", decoded.username);
 
-    const username = decoded.username;   // BUG 1 fixed
-
-    let foundUser = null;
-    for (let i = 0; i < users.length; i++) {
-      if (users[i].username === username) {
-        foundUser = users[i];
-      }
-    }
-
-    if (!foundUser) {
-      res.json({ message: "User not found" });
-      return;
-    }
-
-    res.json({                    // BUG 2 fixed (no semicolons inside object)
-      username: foundUser.username,
-      password: foundUser.password
-    });
-
-  } catch (e) {                    // BUG 3 fixed (JWT invalid handling)
-    res.status(401).json({
-      message: "Invalid token"
-    });
+    req.username = decoded.username;
+    next();
+  } catch (e) {
+    console.log("Token invalid");
+    res.status(401).json({ message: "Invalid or missing token" });
   }
+}
+
+
+// Routes
+
+app.post("/signup", logger, (req, res) => {
+  console.log("Signup body:", req.body);
+
+  const { username, password } = req.body;
+  users.push({ username, password });
+
+  console.log("Users:", users);
+
+  res.json({ message: "You are signed up" });
 });
 
-app.listen(3001);
+
+app.post("/signin", logger, (req, res) => {
+  console.log("Signin body:", req.body);
+
+  const { username, password } = req.body;
+
+  const foundUser = users.find(
+    u => u.username === username && u.password === password
+  );
+
+  if (!foundUser) {
+    console.log("Invalid credentials");
+    return res.json({ message: "Credentials are incorrect" });
+  }
+
+  const token = jwt.sign({ username }, JWT_SECRET);
+  console.log("JWT created:", token);
+
+  res.json({ token });
+});
+
+
+app.get("/get_password", logger, auth, (req, res) => {
+  console.log("Logged in user:", req.username);
+
+  const foundUser = users.find(u => u.username === req.username);
+
+  if (!foundUser) {
+    console.log("User not found");
+    return res.json({ message: "User not found" });
+  }
+
+  res.json({
+    username: foundUser.username,
+    password: foundUser.password
+  });
+});
+
+
+app.listen(3001, () => {
+  console.log("Server running on http://localhost:3001");
+});

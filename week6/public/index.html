@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Auth Website</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+
+<h2>Signup</h2>
+<input id="suid" type="text" placeholder="Username">
+<input id="spass" type="password" placeholder="Password">
+<button onclick="signup()">Signup</button>
+
+<hr>
+
+<h2>Signin</h2>
+<input id="siid" type="text" placeholder="Username">
+<input id="sipass" type="password" placeholder="Password">
+<button onclick="signin()">Signin</button>
+
+<hr>
+
+<h2>User Info</h2>
+<button onclick="getInfo()">Get My Info</button>
+<pre id="information"></pre>
+
+<script>
+async function signup() {
+  const username = document.getElementById("suid").value;
+  const password = document.getElementById("spass").value;
+
+  await axios.post("http://localhost:3001/signup", {
+    username,
+    password
+  });
+
+  alert("Signed up successfully!");
+}
+
+async function signin() {
+  const username = document.getElementById("siid").value;
+  const password = document.getElementById("sipass").value;
+
+  const response = await axios.post("http://localhost:3001/signin", {
+    username,
+    password
+  });
+
+  const token = response.data.token;
+
+  localStorage.setItem("token", token);
+  alert("Logged in!");
+}
+
+async function getInfo() {
+  const token = localStorage.getItem("token");
+
+  const response = await axios.get("http://localhost:3001/get_password", {
+    headers: {
+      token: token
+    }
+  });
+
+  document.getElementById("information").innerText =
+    JSON.stringify(response.data, null, 2);
+}
+</script>
+
+</body>
+</html>
