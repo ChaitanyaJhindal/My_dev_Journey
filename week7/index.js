@@ -1,15 +1,20 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const {UserModel,TodoModel} = require("./db");
-const jwt = require("jsonwebtoken")
-const JWT_SECRET="thisismysecret";
+const { UserModel, TodoModel } = require("./db");
+const jwt = require("jsonwebtoken");
 
-mongoose.connect("mongodb+srv://chaitanyavedansh_db_user:chaitanya123@cluster0.gdjxqnz.mongodb.net/new-experiment")
+const JWT_SECRET = "thisismysecret";
+
+mongoose.connect(
+  "mongodb+srv://chaitanyavedansh_db_user:chaitanya123@cluster0.gdjxqnz.mongodb.net/new-experiment"
+);
 
 app.use(express.json());
 
-app.post("/signup", async function(req,res){
+
+// ---------- SIGNUP ----------
+app.post("/signup", async function (req, res) {
   const email = req.body.username;
   const password = req.body.password;
   const name = req.body.name;
@@ -24,40 +29,82 @@ app.post("/signup", async function(req,res){
     message: "User created"
   });
 });
-   //end 
 
-app.post("/signin", async function(req,res){
-    const email = req.body.username;
-    const password = req.body.password;
 
-    const user= await UserModel.findOne({
-       email:email,
-       password:password
-    })
+// ---------- SIGNIN ----------
+app.post("/signin", async function (req, res) {
+  const email = req.body.username;
+  const password = req.body.password;
 
-    console.log(user);
+  const user = await UserModel.findOne({
+    email,
+    password
+  });
 
-    if(user){
-        const token =jwt.sign({
-            id:user._id
-        },JWT_SECRET);
-        res.json({
-            token: token
-        });
-    }
-    else{
-        res.status(403).json({
-            message: "Incorrect credentials"
-        })
-    }
+  if (user) {
+    const token = jwt.sign(
+      {
+        id: user._id.toString()
+      },
+      JWT_SECRET
+    );
+
+    res.json({
+      token
+    });
+  } else {
+    res.status(403).json({
+      message: "Incorrect credentials"
+    });
+  }
 });
 
-app.post("/todo",function(req,res){
 
+// ---------- AUTH MIDDLEWARE ----------
+function auth(req, res, next) {
+  const token = req.headers.authorization;   // CORRECT
+
+  try {
+    const decodedData = jwt.verify(token, JWT_SECRET);
+
+    req.userid = decodedData.id;              // CORRECT
+    next();
+  } catch (err) {
+    res.status(403).json({
+      message: "Invalid token"
+    });
+  }
+}
+
+
+// ---------- CREATE TODO ----------
+app.post("/todo", auth, async function (req, res) {
+  const title = req.body.title;
+  const done = req.body.done;
+
+  await TodoModel.create({
+    userId: req.userid,
+    title,
+    done
+  });
+
+  res.json({
+    message: "Todo created"
+  });
 });
 
-app.get("/todos",function(req,res){
 
+// ---------- GET TODOS ----------
+app.get("/todos", auth, async function (req, res) {
+  const todos = await TodoModel.find({
+    userId: req.userid
+  });
+
+  res.json({
+    todos
+  });
 });
 
+
+// ---------- START SERVER ----------
 app.listen(3000);
