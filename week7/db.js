@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const User = new Schema({
+const Userh = new Schema({
   email: String,
   password: String,
   name: String
 });
 
-const Todo = new Schema({
+const Todoh = new Schema({
   title: String,
   done: Boolean,
   userId: Schema.Types.ObjectId
