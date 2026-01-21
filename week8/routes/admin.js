@@ -31,6 +31,6 @@ adminRouter.get("/course",function(req,res){
     })
 })
 
-module.exports{
+module.exports = {
     adminRouter
 };
