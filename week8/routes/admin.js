@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const {JWT_ADMIN_PASSWORD}= require("../config");
 const {adminSchema, adminModel, courseModel} = require("../db")
+const { adminmiddleware } = require("../middlewares/admin");
 
 adminRouter.post("/signup", async function(req,res){
     try {
@@ -51,10 +52,10 @@ adminRouter.post("/signin", async function (req, res) {
       });
     }
 
-    const token = jwt.sign(
-      { id: admin._id },
-      JWT_USER_PASSWORD
-    );
+  const token = jwt.sign(
+  { id: admin._id },
+  JWT_ADMIN_PASSWORD
+);
 
     res.json({
       message: "Signin successful",
@@ -69,20 +70,27 @@ adminRouter.post("/signin", async function (req, res) {
   }
 });
 
+adminRouter.post("/course", adminmiddleware, async function (req, res) {
+  const adminId = req.userId;
+  const { title, description, imageUrl, price } = req.body;
 
-adminRouter.post("/course",adminmiddleware , async function(req,res){
-    const adminId = req.userId;
-    const {title,description,imageURl, price}= req.body;
-    const course = await courseModel.create({
-      title , description , imageUrl , price , creatorId 
-    })
-    res.json({
-        message: "courses created",
-        courseId: course._id
-    })
-})
+  const course = await courseModel.create({
+    title,
+    description,
+    imageUrl,
+    price,
+    creatorId: adminId
+  });
 
-adminRouter.put("/course", async function (req, res) {
+  res.json({
+    message: "Course created",
+    courseId: course._id
+  });
+});
+
+
+adminRouter.put("/course", adminmiddleware, async function (req, res) {
+
   try {
     const adminID = req.userId;
     const { title, description, price, imageUrl, courseId } = req.body;
@@ -119,7 +127,8 @@ adminRouter.put("/course", async function (req, res) {
 });
 
 
-adminRouter.get("/course", async function (req, res) {
+adminRouter.get("/course", adminmiddleware, async function (req, res) {
+
   try {
     const adminId = req.userId;
 

@@ -11,7 +11,6 @@ app.use(express.json());
 
 app.use("/api/v1/user", UserRouter);
 
-
 // All admin-related requests will go to /api/v1/admin
 app.use("/api/v1/admin", adminRouter);
 
