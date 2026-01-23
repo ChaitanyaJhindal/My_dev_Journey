@@ -3,7 +3,7 @@ const UserRouter = Router();
 const {userSchema, userModel} = require("../db")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const JWT_USER_PASSWORD = "abcdxyz"
+const {JWT_USER_PASSWORD}= require("../config");
 UserRouter.post("/signup", async function (req, res) {
     try {
         const { email, password, firstname, lastname } = req.body;

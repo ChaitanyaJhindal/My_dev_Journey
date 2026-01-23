@@ -27,11 +27,13 @@ async function connectDB() {
     console.log("✅ Connected to MongoDB");
 
     app.listen(port, () => {
-      console.log(`🚀 Server running on http://localhost:${port}`);
+      console.log(` Server running on http://localhost:${port}`);
 
-      console.log("📌 User APIs:");
-      console.log(`➡️  POST  http://localhost:${port}/api/v1/user/signup`);
-      console.log(`➡️  POST  http://localhost:${port}/api/v1/user/signin`);
+      console.log(" User APIs:");
+      console.log(`  POST  http://localhost:${port}/api/v1/user/signup`);
+      console.log(`  POST  http://localhost:${port}/api/v1/user/signin`);
+      console.log(`  POST  http://localhost:${port}/api/v1/admin/signin`);
+      console.log(`  POST  http://localhost:${port}/api/v1/admin/signup`);
     });
 
   } catch (error) {
