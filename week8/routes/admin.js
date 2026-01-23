@@ -82,17 +82,63 @@ adminRouter.post("/course",adminmiddleware , async function(req,res){
     })
 })
 
-adminRouter.put("/course",function(req,res){
-    res.json({
-        message: "courses endpoint"
-    })
-})
+adminRouter.put("/course", async function (req, res) {
+  try {
+    const adminID = req.userId;
+    const { title, description, price, imageUrl, courseId } = req.body;
 
-adminRouter.get("/course",function(req,res){
+    const course = await courseModel.updateOne(
+      {
+        _id: courseId,
+        creatorId: adminID   // ensures only creator can update
+      },
+      {
+        title: title,
+        description: description,
+        price: price,
+        imageUrl: imageUrl
+      }
+    );
+
+    if (course.matchedCount === 0) {
+      return res.status(403).json({
+        message: "Course not found or you are not authorized"
+      });
+    }
+
     res.json({
-        message: "courses endpoint"
-    })
-})
+      message: "Course updated successfully"
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      message: "Something went wrong",
+      error: err.message
+    });
+  }
+});
+
+
+adminRouter.get("/course", async function (req, res) {
+  try {
+    const adminId = req.userId;
+
+    const courses = await courseModel.find({
+      creatorId: adminId
+    });
+
+    res.json({
+      courses: courses
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      message: "Something went wrong",
+      error: err.message
+    });
+  }
+});
+
 
 module.exports = {
     adminRouter
