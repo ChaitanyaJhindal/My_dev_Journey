@@ -76,56 +76,149 @@
 
 
 
+// ...existing code...
 import { useState, useEffect } from "react";
 
 function App() {
-  const [currentTab, setCurrentTab] = useState();
+  const [showTimer, setShowTimer] = useState(true);
 
   useEffect(() => {
-    console.log("data is being fetched");
+    const id = setInterval(() => {
+      setShowTimer((currentValue) => !currentValue);
+    }, 5000);
 
-    fetch("https://jsonplaceholder.typicode.com/todos/1")
-      .then(response => response.json())
-      .then(json => {
-        console.log(json);
-        console.log("data is fetched");
-      });
-  }, [currentTab]); // runs only once after first render
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <div>
-      <button
-        onClick={() => setCurrentTab("feed")}
-        style={{ color: currentTab === "feed" ? "red" : "black" }}
-      >
-        feed
-      </button>
-
-      <button
-        onClick={() => setCurrentTab("notification")}
-        style={{ color: currentTab === "notification" ? "red" : "black" }}
-      >
-        Notification
-      </button>
-
-      <button
-        onClick={() => setCurrentTab("messages")}
-        style={{ color: currentTab === "messages" ? "red" : "black" }}
-      >
-        messages
-      </button>
-
-      <button
-        onClick={() => setCurrentTab("jobs")}
-        style={{ color: currentTab === "jobs" ? "red" : "black" }}
-      >
-        Jobs
-      </button>
+      {showTimer && <Timer />}
     </div>
   );
 }
 
+const Timer = function () {
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      console.log("from inside clock");
+      setSeconds((prev) => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(id);
+  }, []);
+
+  return <div>{seconds} seconds elapsed</div>;
+};
+
 export default App;
+// ...existing code...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// function App() {
+//   const [currentTab, setCurrentTab] = useState();
+
+//   useEffect(() => {
+//     console.log("data is being fetched");
+
+//     fetch("https://jsonplaceholder.typicode.com/todos/1")
+//       .then(response => response.json())
+//       .then(json => {
+//         console.log(json);
+//         console.log("data is fetched");
+//       });
+//   }, [currentTab]); // runs only once after first render
+
+//   return (
+//     <div>
+//       <button
+//         onClick={() => setCurrentTab("feed")}
+//         style={{ color: currentTab === "feed" ? "red" : "black" }}
+//       >
+//         feed
+//       </button>
+
+//       <button
+//         onClick={() => setCurrentTab("notification")}
+//         style={{ color: currentTab === "notification" ? "red" : "black" }}
+//       >
+//         Notification
+//       </button>
+
+//       <button
+//         onClick={() => setCurrentTab("messages")}
+//         style={{ color: currentTab === "messages" ? "red" : "black" }}
+//       >
+//         messages
+//       </button>
+
+//       <button
+//         onClick={() => setCurrentTab("jobs")}
+//         style={{ color: currentTab === "jobs" ? "red" : "black" }}
+//       >
+//         Jobs
+//       </button>
+//     </div>
+//   );
+// }
+
+// export default App;
 
 
 
