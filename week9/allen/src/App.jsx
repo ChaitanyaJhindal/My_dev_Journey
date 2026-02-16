@@ -73,46 +73,126 @@
 // }
 
 // export default App;
+import React from 'react';
+
+const Card = ({ children }) => {
+    return (
+        <div style={{
+            border: '1px solid #ccc',
+            borderRadius: '5px',
+            padding: '20px',
+            margin: '10px',
+            boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.1)',
+        }}>
+            {children}
+        </div>
+    );
+};
+
+const App = () => {
+    return (
+        <div>
+            <Card> 
+              {/* // whatever comes insoide the card component is rendred inside childer prop above  */}
+                <h2>Card Title</h2>
+                <p>This is some content inside the card.</p>
+            </Card>
+            <Card>
+                <h2>Another Card</h2>
+                <p>This card has different content!</p>
+            </Card>
+        </div>
+    );
+};
+
+export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 // ...existing code...
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 
-function App() {
-  const [showTimer, setShowTimer] = useState(true);
+// function App() {
+//   const [showTimer, setShowTimer] = useState(true);
 
-  useEffect(() => {
-    const id = setInterval(() => {
-      setShowTimer((currentValue) => !currentValue);
-    }, 5000);
+//   useEffect(() => {
+//     const id = setInterval(() => {
+//       setShowTimer((currentValue) => !currentValue);
+//     }, 5000);
 
-    return () => clearInterval(id);
-  }, []);
+//     return () => clearInterval(id);
+//   }, []);
 
-  return (
-    <div>
-      {showTimer && <Timer />}
-    </div>
-  );
-}
+//   return (
+//     <div>
+//       {showTimer && <Timer />}
+//     </div>
+//   );
+// }
 
-const Timer = function () {
-  const [seconds, setSeconds] = useState(0);
+// const Timer = function () {
+//   const [seconds, setSeconds] = useState(0);
 
-  useEffect(() => {
-    const id = setInterval(() => {
-      console.log("from inside clock");
-      setSeconds((prev) => prev + 1);
-    }, 1000);
+//   useEffect(() => {
+//     const id = setInterval(() => {
+//       console.log("from inside clock");
+//       setSeconds((prev) => prev + 1);
+//     }, 1000);
 
-    return () => clearInterval(id);
-  }, []);
+//     return () => clearInterval(id);
+//   }, []);
 
-  return <div>{seconds} seconds elapsed</div>;
-};
+//   return <div>{seconds} seconds elapsed</div>;
+// };
 
-export default App;
+// export default App;
 // ...existing code...
 
 
