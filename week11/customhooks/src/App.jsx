@@ -1,27 +1,126 @@
-import { use, useRef, useState } from 'react';
-import './App.css';
-import { usePrev } from "./hooks/useprev.js";
-function useDebounce(orginalfn){
-    const currentClock = useRef();
-    const fn = ()=> {
-        clearTimeout(currentClock.current);
-        currentClock.current=setTimeout(originalfn, 20);
-    }
-    return fn ;
-}
-function App() {
-    function senddatabacktobk(){
-        console.log("Data sent to bk ");
-    }
-    const debouncefn =useDebounce(senddatabacktobk)
-    return(
-        <div>
-            <input type = "text" onChange={debouncefn}></>
-        </div>
-    );
-}
 
-export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import { use, useRef, useState } from 'react';
+// import './App.css';
+// import { usePrev } from "./hooks/useprev.js";
+// function useDebounce(orginalfn){
+//     const currentClock = useRef();
+//     const fn = ()=> {
+//         clearTimeout(currentClock.current);
+//         currentClock.current=setTimeout(originalfn, 20);
+//     }
+//     return fn ;
+// }
+// function App() {
+//     function senddatabacktobk(){
+//         console.log("Data sent to bk ");
+//     }
+//     const debouncefn =useDebounce(senddatabacktobk)
+//     return(
+//         <div>
+//             <input type = "text" onChange={debouncefn}></>
+//         </div>
+//     );
+// }
+
+// export default App;
 
 
 
