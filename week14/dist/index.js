@@ -1,8 +1,68 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let greet = () => {
-    console.log("Hi ! there ");
+let person = {
+    name: "Harkirat ",
+    age: 21,
+    greet: () => {
+        return "hi ";
+    }
 };
+class Manager {
+    name;
+    age;
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+    greet() {
+        return "Hello from Manager";
+    }
+}
+let user = new Manager("Rahul", 40);
+console.log(user.name);
+// interface Address {
+//     city: String ;
+//     country : String;
+//     pincode: number;
+//     houseNumber: String 
+// }
+// interface User {
+//     name: string , 
+//     age: number , 
+//     address: Address
+// }
+// interface Office {
+//     address : Address
+// }
+// let user2: User = {
+//     name: "chaitanya",
+//     age: 21,
+//     address: {
+//         city: "Fzd",
+//         country: "India",
+//         pincode: 123456,
+//         houseNumber: "12A"
+//     }
+// }
+// function isLegal(user2: User) : boolean {
+//     if(user2.age >= 18 ){
+//         return true 
+//     }
+//     else{
+//         return false
+//     }
+// }
+// if (isLegal(user2) == false) {
+//     console.log("you are not legal");
+// } else {
+//     console.log("You are legal");
+// }
+// function sum(a: number , b: number): number {
+//     return a + b ;
+// } 
+// let greet = () =>{
+//     console.log("Hi ! there ");
+// }
 // function delayedcall(fun: ()=>void){
 //     setTimeout(fun,100);
 // }

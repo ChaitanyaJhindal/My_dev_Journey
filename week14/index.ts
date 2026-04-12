@@ -1,37 +1,170 @@
-interface Address {
-    city: String ;
-    country : String;
-    pincode: number;
-    houseNumber: String 
-}
+// interface People {
+//     name: String , 
+//     age: number ,
+//     greet: () => String ,
+// }
+
+// let person: People ={
+//     name:"Harkirat ",
+//     age : 21 , 
+//     greet: () => {
+//         return "hi " 
+//     }
+// }
+
+// class Manager implements People {
+//     name : String ;
+//     age: number ;
+   
+//     constructor( name : String , age: number ){
+//         this.name = name ; 
+//         this.age = age ;
+//     }
+//      greet(): string {
+//         return "Hello from Manager";
+//     }
+// }
+// let user = new Manager ("Rahul",  40);
+// console.log(user.name)
 
 
 
-interface User {
-    name: string , 
-    age: number , 
-    address: Address
-}
-
-interface Office {
-    address : Address
-}
-let user2: User = {
-    name: "chaitanya",
-    age: 21,
-    address: {
-        city: "Fzd",
-        country: "India",
-        pincode: 123456,
-        houseNumber: "12A"
-    }
-}
 
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// interface Address {
+//     city: String ;
+//     country : String;
+//     pincode: number;
+//     houseNumber: String 
+// }
+
+
+
+// interface User {
+//     name: string , 
+//     age: number , 
+//     address: Address
+// }
+
+// interface Office {
+//     address : Address
+// }
+// let user2: User = {
+//     name: "chaitanya",
+//     age: 21,
+//     address: {
+//         city: "Fzd",
+//         country: "India",
+//         pincode: 123456,
+//         houseNumber: "12A"
+//     }
+// }
+
+// function isLegal(user2: User) : boolean {
+//     if(user2.age >= 18 ){
+//         return true 
+//     }
+//     else{
+//         return false
+//     }
+// }
+
+
+// if (isLegal(user2) == false) {
+//     console.log("you are not legal");
+// } else {
+//     console.log("You are legal");
+// }
 
 
 
