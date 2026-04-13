@@ -1,3 +1,80 @@
+abstract class User {
+    name : String ;
+    constructor(name: String){
+        this.name =name ;
+    }
+    abstract greet: () => string ;
+}
+class Employee implements User {
+    name: String ; 
+    constructor(name: string ){
+        this.name = name 
+    }
+    greet(){
+        return "hi " + this.name 
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // interface People {
 //     name: String , 
 //     age: number ,
