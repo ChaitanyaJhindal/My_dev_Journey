@@ -1,11 +1,67 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-;
-function sumOfAge(user1, user2) {
-    return user1.age + user2.age;
-}
-const age = sumOfAge({ name: 'Taro', age: 20 }, { name: 'Chaitanya', age: 21 });
-console.log(age);
+const users = new Map();
+users.set("icdb@234", { name: "Chaitanya", age: 21, email: "gued@gmail.com" });
+users.set("xueun@345", { name: "jncu", age: 32, email: "buidyu@gmail.com" });
+const user = users.get("icdb@234");
+console.log(user);
+// type Users = Record <string , {age : number ; name:string}>;
+// const users : Users = {
+//     "dgue@1223":{age: 21 , name:"Chaitanya"},
+//     "uec@433":{age:33 , name:"guecd"},
+// }
+// type UsersAge = {
+//     [key: string ] : number;
+// }
+// const users:UsersAge = {
+//     "abc@123" :"Chaitanya",
+//     "ncoid":"Harkirat";  
+// }
+// //read only
+// // IN JS or TS we can change the inernal value of array or object but can't change the whole array or the object 
+// // But to avoid that or to inforce that read-only mode read the code below 
+// // type User = {
+// //     readonly name : String ,
+// //     readonly age : number ;
+// // }
+// type User = {
+//      name : String ,
+//      age : number ;
+// } 
+// // Other alternative instaed of writing read only in very filed can do this simply .
+// const user : Readonly <User> =  {
+//     name : 'John ',
+//     age : 21
+// }
+// // user.age =12 can't do this in read only mode 
+// interface User {
+//     name: string;
+//     age: number;
+//     email: string;
+//     id: string;
+//     password: string;
+// }
+// // Pick specific fields
+// type UpdateProps = Pick<User, 'name' | 'age' | 'email'>;
+// // Make them optional
+// type UpdatePropsOptional = Partial<UpdateProps>;
+// function updateUser(updatesProps: UpdatePropsOptional) {
+//     // hit the DB to update the user
+// }
+// updateUser({
+//     name: "Chaitanya",
+//     age: 21,
+//     email: "xyz"
+// });
+// interface User {
+//     name: string , 
+//     age: number ;
+// };
+// function sumOfAge(user1: User, user2:User){
+//     return user1.age + user2.age;
+// }
+// const age = sumOfAge({name:'Taro',age:20},{name:'Chaitanya',age:21});
+// console.log(age);
 // interface User {
 //     firstName: string;
 //     lastName: string;

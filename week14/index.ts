@@ -1,26 +1,355 @@
-//read only
-// IN JS or TS we can change the inernal value of array or object but can't change the whole array or the object 
-// But to avoid that or to inforce that read-only mode read the code below 
+import { z } from 'zod';
+import express from "express";
+
+const app = express();
+
+// Define the schema for profile update
+const userProfileSchema = z.object({
+  name: z.string().min(1, { message: "Name cannot be empty" }),
+  email: z.string().email({ message: "Invalid email format" }),
+  age: z.number().min(18, { message: "You must be at least 18 years old" }).optional(),
+});
+
+app.put("/user", (req, res) => {
+  const { success } = userProfileSchema.safeParse(req.body);
+  const updateBody = req.body; // how to assign a type to updateBody?
+
+  if (!success) {
+    res.status(411).json({});
+    return
+  }
+  // update database here
+  res.json({
+    message: "User updated"
+  })
+});
+
+app.listen(3000);
 
 
 
-// type User = {
-//     readonly name : String ,
-//     readonly age : number ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// type Event = 'click' | 'scroll' | 'mousemove';
+// type ExcludeEvent = Exclude<Event, 'scroll'>; // 'click' | 'mousemove'
+
+// const handleEvent = (event: ExcludeEvent) => {
+//   console.log(`Handling event: ${event}`);
+// };
+
+// handleEvent('click'); // OK
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const users = new Map()
+// users.set("icdb@234",{name:"Chaitanya",age:21,email:"gued@gmail.com"})
+// users.set("xueun@345",{name:"jncu",age:32,email:"buidyu@gmail.com"})
+// const user = users.get("icdb@234")
+// console.log(user);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// type Users = Record <string , {age : number ; name:string}>;
+
+// const users : Users = {
+//     "dgue@1223":{age: 21 , name:"Chaitanya"},
+//     "uec@433":{age:33 , name:"guecd"},
 // }
 
 
-type User = {
-     name : String ,
-     age : number ;
-} 
-// Other alternative instaed of writing read only in very filed can do this simply .
-const user : Readonly <User> =  {
-    name : 'John ',
-    age : 21
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// type UsersAge = {
+//     [key: string ] : number;
+// }
+
+// const users:UsersAge = {
+//     "abc@123" :"Chaitanya",
+//     "ncoid":"Harkirat";  
+// }
+
+
+
  
-// user.age =12 can't do this in read only mode 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// //read only
+// // IN JS or TS we can change the inernal value of array or object but can't change the whole array or the object 
+// // But to avoid that or to inforce that read-only mode read the code below 
+
+
+
+// // type User = {
+// //     readonly name : String ,
+// //     readonly age : number ;
+// // }
+
+
+// type User = {
+//      name : String ,
+//      age : number ;
+// } 
+// // Other alternative instaed of writing read only in very filed can do this simply .
+// const user : Readonly <User> =  {
+//     name : 'John ',
+//     age : 21
+// }
+ 
+// // user.age =12 can't do this in read only mode 
 
 
 
