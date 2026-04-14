@@ -1,26 +1,111 @@
-interface User {
-    name: string;
-    age: number;
-    email: string;
-    id: string;
-    password: string;
+//read only
+// IN JS or TS we can change the inernal value of array or object but can't change the whole array or the object 
+// But to avoid that or to inforce that read-only mode read the code below 
+
+
+
+// type User = {
+//     readonly name : String ,
+//     readonly age : number ;
+// }
+
+
+type User = {
+     name : String ,
+     age : number ;
+} 
+// Other alternative instaed of writing read only in very filed can do this simply .
+const user : Readonly <User> =  {
+    name : 'John ',
+    age : 21
 }
+ 
+// user.age =12 can't do this in read only mode 
 
-// Pick specific fields
-type UpdateProps = Pick<User, 'name' | 'age' | 'email'>;
 
-// Make them optional
-type UpdatePropsOptional = Partial<UpdateProps>;
 
-function updateUser(updatesProps: UpdatePropsOptional) {
-    // hit the DB to update the user
-}
 
-updateUser({
-    name: "Chaitanya",
-    age: 21,
-    email: "xyz"
-});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// interface User {
+//     name: string;
+//     age: number;
+//     email: string;
+//     id: string;
+//     password: string;
+// }
+
+// // Pick specific fields
+// type UpdateProps = Pick<User, 'name' | 'age' | 'email'>;
+
+// // Make them optional
+// type UpdatePropsOptional = Partial<UpdateProps>;
+
+// function updateUser(updatesProps: UpdatePropsOptional) {
+//     // hit the DB to update the user
+// }
+
+// updateUser({
+//     name: "Chaitanya",
+//     age: 21,
+//     email: "xyz"
+// });
 
 
 
